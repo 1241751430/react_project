@@ -1,0 +1,170 @@
+.main {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.main .search {
+    height: 40px;
+    line-height: 40px;
+    position: absolute;
+    width: 100%;
+    top: 1px;
+}
+
+.main .container {
+    width: 100%;
+    height: 100%;
+    /* 给content添加了垂直的滚动条 */
+    overflow-y: auto;
+    padding-bottom: 60px
+}
+/* 滚动条样式 */
+body ::-webkit-scrollbar {
+    width: 3px;
+  }
+/* 主页菜单 */
+.ui.main-menu>.four.column.row>.column {
+    height: 80px;
+    text-align: center;
+    line-height: 40px;
+    margin-top: 10px
+}
+
+.main-menu .column i {
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 30px;
+    border-radius: 50%;
+    color: #fff;
+}
+
+.main-menu .column:nth-child(1) i {
+    background-color: #0ac250;
+}
+
+.main-menu .column:nth-child(2) i {
+    background-color: #ff611a;
+}
+
+.main-menu .column:nth-child(3) i {
+    background-color: #f6b906;
+}
+
+.main-menu .column:nth-child(4) i {
+    background-color: #4f99e4;
+}
+
+.main-menu .column:nth-child(5) i {
+    background-color: #fd8701;
+}
+
+.main-menu .column:nth-child(6) i {
+    background-color: #23acf2;
+}
+
+.main-menu .column:nth-child(7) i {
+    background-color: #eb1e03;
+}
+
+.main-menu .column:nth-child(8) i {
+    background-color: #7ccc39;
+}
+
+/* 好客资讯 */
+.home-msg {
+    margin: 25px 0 15px 0;
+    position: relative;
+}
+
+.home-msg .ui.unstackable.items>.item.home-msg-img>.image,
+.home-msg .ui.unstackable.items>.item.home-msg-img>.image>img {
+    width: 50px !important;
+    height: 50px !important;
+    margin-left: 7px;
+    margin-top: 2px;
+}
+
+.ui.items>.item>.content>.header {
+    display: block;
+    height: 25px;
+    margin-top: 5px;
+    font-weight: 600;
+}
+
+.ui.items>.item>.content>.header span:first-child {
+    color: orange;
+    margin-right: 10px;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.ui.items>.item>.content>.header span:last-child {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: baseline;
+    width: 65%;
+}
+
+.home-msg .home-msg-more {
+    position: absolute;
+    right: 5px;
+    top: 12px;
+}
+/* 好客问答 */
+.home-ask .home-ask-title{
+    font-size: 20px;
+    font-weight: 600;
+    margin-left: 10px;
+    line-height: 40px;
+    border-bottom:1px solid #ccc;
+}
+.home-ask ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+.home-ask ul li{
+    height: 80px;
+    line-height: 80px;
+}
+.home-ask ul li div {
+    height: 35px;
+    line-height: 35px;
+  }
+  .home-ask ul li div:first-child {
+    margin-left: 10px;
+    font-size: 18px;
+  }
+  .home-ask ul li div:last-child {
+    margin-left: 30px;
+    position: relative;
+  }
+  .home-ask ul li div:last-child div {
+    position: absolute;
+    font-size: 14px;
+    right: 15px;
+    top: 0;
+  }
+  /* 房屋样式 */
+.home-hire-title {
+    height: 40px;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 40px;
+    padding-left: 10px;
+    border-bottom: 1px solid #cecece;
+  }
+  
+  .ui.items > .item > .image {
+    margin-left: 10px;
+    margin-top: 6px;
+  }
+  
+  .ui.items > .item > .content > .description:last-child {
+    color: orange;
+  }
+  
