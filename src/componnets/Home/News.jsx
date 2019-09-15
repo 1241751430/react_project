@@ -4,7 +4,7 @@ import Tloader from 'react-touch-loader'
 // 导入资讯样式文件
 import './News.css'
 // 导入ui 组件
-import { Tab, Item, ItemGroup, Icon, Message } from 'semantic-ui-react'
+import { Tab, Item, ItemGroup, Icon } from 'semantic-ui-react'
 
 class News extends React.Component {
 
@@ -52,7 +52,7 @@ function M3 () {
 
 // Message组件
 function RecoMessage ({ data }) {
-  console.log(data)
+  // console.log(data)
   return (
     <ItemGroup unstackable>
       {data.map(item => (
@@ -77,7 +77,7 @@ function Answer ({ data }) {
   return (
     <ul className='info-ask-list'>
       {data.map(item => (
-        <li key={item.question_id}>
+        <li key={item.id}>
           <div className="title">
             <span className="cate">
               <Icon color='green' name='user' size='small'></Icon>
@@ -88,13 +88,13 @@ function Answer ({ data }) {
           <div className="user">
             <Icon circular name='users' size='mini'></Icon>
             {item.username}的回答
-        </div>
+          </div>
           <div className="info">
             {item.answer_content}
           </div>
           <div className="tag">
             {item.question_tag.split(',').map(tag => (
-              <span kye={tag}>{tag}</span>
+              <span key={tag}>{tag}</span>
             ))}
             <span>{item.qnum}个回答</span>
           </div>
@@ -112,55 +112,92 @@ class Loder extends React.Component {
       hasMore: false,
       initializing: 1,
       pagenum: 0,   //从第几条开始拿
-      pagesize: 3,    //需要获取多少条
+      pagesize: 2,    //需要获取多少条
       list: [],   //用来保存数据
       total: 0
     }
   }
 
-  async componentDidMount () {
-    let res = await this.axios.post('infos/list', {
-      type: this.props.type,
-      pagenum: this.state.pagenum,
-      pagesize: this.state.pagesize
-    })
-    console.log(res)
-    let { meta, data } = res
-    if (meta.status === 200) {
-      this.setState({
-        list: data.list.data,
-        total: data.list.total,
-        hasMore: this.state.pagenum + this.state.pagesize < data.list.total,
-        initializing: 2
+  // 加载数据
+  loadData = () => {
+    // 发送ajax请求，动态加载数据
+    // console.log(this.props.type)
+    return this.axios
+      .post('infos/list', {
+        type: this.props.type,
+        pagenum: this.state.pagenum,
+        pagesize: this.state.pagesize
       })
-    }
+      .then(res => {
+        let { meta, data } = res
+        if (meta.status === 200) {
+          return data.list
+        }
+      })
   }
-// 下拉刷新
-  refresh = (resolve, reject) => {
-    console.log(1)
+  // 需要在组件渲染的时候，动态的加载数据
+  async componentDidMount () {
+    let data = await this.loadData()
+    let newNum = this.state.pagenum + this.state.pagesize
+    this.setState({
+      list: data.data,
+      initializing: 2,
+      toal: data.total,
+      pagenum: newNum,
+      hasMore: newNum < data.total
+    })
+  }
+  // 下拉刷新
+  loadMore = async (resolve, reject) => {
+    let data = await this.loadData()
+    let newNum = this.state.pagenum + this.state.pagesize
+    let newList = [ ...this.state.list, ...data.data ]
+    this.setState({
+      list: newList,
+      initializing: 2,
+      toal: data.total,
+      pagenum: newNum,
+      hasMore: newNum < data.total
+    })
     resolve()
   }
-// 加载更多
-  loadMore = (resolve) => {
-    console.log(2)
-    resolve()
+  // 加载更多
+  refresh = async (resolve, reject) => {
+    // 重置初始的条数
+    // react的setState是异步的，通过setState修改react内部的数据，不是立即更新的
+    // 如果就想获取立即更新的数据
+    this.setState({
+      pagenum: 0
+    })
+    setTimeout(async () => {
+      let data = await this.loadData()
+      let newNum = this.state.pagenum + this.state.pagesize
+      this.setState({
+        list: data.data,
+        pagenum: newNum,
+        hasMore: newNum < data.total
+      })
+      resolve()
+    }, 0)
   }
 
   render () {
-// 参数解构
+    // 参数解构
     let { hasMore, initializing, list } = this.state
     let { type } = this.props
     return (
-      // 刷新组件
-      <Tloader
-        className="main"
-        onRefresh={this.refresh}
-        onLoadMore={this.loadMore}
-        hasMore={hasMore}
-        initializing={initializing}
-      >
-        {type === '3' ? <Answer data={list}></Answer> : <RecoMessage data={list}></RecoMessage>}
-      </Tloader>
+      <div className="vew">
+        {/* 刷新组件 */}
+        <Tloader
+          className="main"
+          onRefresh={this.refresh}
+          onLoadMore={this.loadMore}
+          hasMore={hasMore}
+          initializing={initializing}
+        >
+          {type === '3' ? <Answer data={list}></Answer> : <RecoMessage data={list}></RecoMessage>}
+        </Tloader>
+      </div>
     )
   }
 }
